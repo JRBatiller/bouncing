@@ -43,7 +43,7 @@ def f_ball(X, t):
     return dXdt
 
 # Gravitational constant
-g = 10  # m/s^2
+g = 10  # m/s^2  !!!!!9.8!!!!!!
 
 # Dimensions of enclosure and ball
 yB = 0 # m  (height of the floor)
