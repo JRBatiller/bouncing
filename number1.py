@@ -38,6 +38,14 @@ def euler_step(x1, t, dt=0.01):
     x2=x1+dxdt(x1,t)*dt
     return x2 
 
+def adjust_deltat(tstart,tend,deltat):
+    #this is not rk4 step adaptive step size
+    fsteps=(tend-tstart)/deltat
+    steps=int((tend-tstart)/deltat)
+    if(fsteps-steps>=0.000005):
+        steps+=1  
+    deltat=(tend-tstart)/steps
+
 #Also make a function called solve_to which solves from x1,t1 to x2,t2 in steps no bigger than deltat_max.
 def solve_to(xstart,tstart,tend,deltat=0.01):
     # should return only last variable
@@ -50,9 +58,14 @@ def solve_to(xstart,tstart,tend,deltat=0.01):
         steps+=1
           
     deltat=(tend-tstart)/steps
+    
     for step in range(steps):
         xnow =euler_step(xnow,tnow, deltat)
         tnow += deltat
+        if(step==steps-1): 
+            tnow=tend
+            
+            
     return xnow
     
     
