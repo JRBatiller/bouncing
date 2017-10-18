@@ -74,14 +74,14 @@ def solve_to(f, xstart,tstart,tend,deltat=0.01):
     return xnow
     
     
-def solve_ode(f, x0, t, deltat=0.01):
+def solve_ode(f, x0, t0, t, deltat=0.01):
     # t is a bloddy array!!!
     #x_list=np.array([solve_to(x0,t0,t1, deltat) for t1 in t ])
     #having t0 here is irritating me somehow
     #this will become really slow
     
     x_list=np.array([])
-    tnow=t0 #THIS IRKS ME
+    tnow=t0 
     xnow=x0
     for time_step in t:
         new_x=solve_to(f, xnow, tnow, time_step, deltat)
@@ -115,14 +115,14 @@ if __name__ == "__main__":
     for z in range(len(deltat_array)):
         #euler set
         start_time=time.time()
-        neweuler=solve_ode(euler_step, x0,t, deltat_array[z])
+        neweuler=solve_ode(euler_step, x0,t0, t, deltat_array[z])
         elapsed_time = time.time() - start_time
         euler=np.append(euler,neweuler)
         euler_time=np.append(euler_time, elapsed_time)
     
         #rk4 set
         start_time=time.time()
-        newrunge=solve_ode(RK4, x0,t, deltat_array[z])
+        newrunge=solve_ode(RK4, x0,t0, t, deltat_array[z])
         elapsed_time = time.time() - start_time
         runge_katta=np.append(runge_katta,newrunge)
         rk_time=np.append(rk_time, elapsed_time)
