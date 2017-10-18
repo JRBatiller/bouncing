@@ -45,6 +45,7 @@ def adjust_deltat(tstart,tend,deltat):
     if(fsteps-steps>=0.000005):
         steps+=1  
     deltat=(tend-tstart)/steps
+    return deltat, steps
 
 #Also make a function called solve_to which solves from x1,t1 to x2,t2 in steps no bigger than deltat_max.
 def solve_to(xstart,tstart,tend,deltat=0.01):
@@ -52,29 +53,33 @@ def solve_to(xstart,tstart,tend,deltat=0.01):
     #steps=int((tend-tstart)/deltat)
     xnow=xstart
     tnow=tstart
-    fsteps=(tend-tstart)/deltat
-    steps=int((tend-tstart)/deltat)
-    if(fsteps-steps>=0.000005):
-        steps+=1
-          
-    deltat=(tend-tstart)/steps
+    deltat, steps=adjust_deltat(tstart, tend, deltat)
     
-    for step in range(steps):
+    for step in range(steps)[:-1]:
         xnow =euler_step(xnow,tnow, deltat)
         tnow += deltat
-        if(step==steps-1): 
-            tnow=tend
-            
+    else: #last step to reach tend exactly
+        deltat=tend-tnow
+        xnow =euler_step(xnow,tnow, deltat)      
             
     return xnow
     
     
-    
 def solve_ode(x0, t, deltat=0.01):
     # t is a bloddy array!!!
-    x_list=np.array([solve_to(x0,t0,t1, deltat) for t1 in t ])
+    #x_list=np.array([solve_to(x0,t0,t1, deltat) for t1 in t ])
     #having t0 here is irritating me somehow
     #this will become really slow
+    
+    x_list=np.array([])
+    tnow=t0 #THIS IRKS ME
+    xnow=x0
+    for time in t:
+        new_x=solve_to(xnow, tnow, time, deltat)
+        x_list=np.append(x_list,new_x)
+        tnow=time
+        xnow=new_x
+    
     return x_list
     
 x0=1
